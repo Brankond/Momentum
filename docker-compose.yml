@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:16.2
+    image: postgres:17.6
     container_name: momentum-postgres
     restart: unless-stopped
     env_file:
@@ -15,7 +15,11 @@ services:
       - pgdata:/var/lib/postgresql/data
       - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-momentum} -d ${POSTGRES_DB:-momentum}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-momentum} -d ${POSTGRES_DB:-momentum}",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -23,7 +27,7 @@ services:
       - momentum-net
 
   redis:
-    image: redis:7.2
+    image: redis:8.2
     container_name: momentum-redis
     restart: unless-stopped
     command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
@@ -38,7 +42,7 @@ services:
       - momentum-net
 
   rabbitmq:
-    image: rabbitmq:3.12-management
+    image: rabbitmq:4.2-management
     container_name: momentum-rabbitmq
     restart: unless-stopped
     env_file:
