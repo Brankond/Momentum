@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: wallet-service
+  datasource:
+    url: jdbc:postgresql://postgres:5432/${POSTGRES_DB:momentum}
+    username: ${POSTGRES_USER:momentum}
+    password: ${POSTGRES_PASSWORD:momentum}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: ${RABBITMQ_DEFAULT_USER:momentum}
+    password: ${RABBITMQ_DEFAULT_PASS:momentum}
+  data:
+    redis:
+      host: redis
+      port: 6379
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
