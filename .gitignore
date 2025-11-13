@@ -29,3 +29,6 @@ replay_pid*
 # IDE settings
 /.idea/
 /.vscode/
+
+# Agent instructions
+AGENTS.md
