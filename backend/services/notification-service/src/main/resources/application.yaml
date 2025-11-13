@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: notification-service
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: ${RABBITMQ_DEFAULT_USER:momentum}
+    password: ${RABBITMQ_DEFAULT_PASS:momentum}
+
+server:
+  port: 8082
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"

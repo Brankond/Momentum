@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: gateway-test
+
+server:
+  port: 0

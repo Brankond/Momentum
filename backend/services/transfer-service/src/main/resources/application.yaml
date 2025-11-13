@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: transfer-service
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: ${RABBITMQ_DEFAULT_USER:momentum}
+    password: ${RABBITMQ_DEFAULT_PASS:momentum}
+
+server:
+  port: 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
