@@ -2,9 +2,12 @@ spring:
   application:
     name: wallet-service
   datasource:
-    url: jdbc:postgresql://postgres:5432/${POSTGRES_DB:momentum}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:momentum}
     username: ${POSTGRES_USER:momentum}
     password: ${POSTGRES_PASSWORD:momentum}
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
   jpa:
     hibernate:
       ddl-auto: validate
@@ -13,14 +16,14 @@ spring:
         format_sql: true
     show-sql: false
   rabbitmq:
-    host: rabbitmq
-    port: 5672
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_DEFAULT_USER:momentum}
     password: ${RABBITMQ_DEFAULT_PASS:momentum}
   data:
     redis:
-      host: redis
-      port: 6379
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
 server:
   port: 8080
 

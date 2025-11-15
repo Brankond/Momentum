@@ -13,6 +13,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
+    // Flyway for database migrations
+    implementation("org.flywaydb:flyway-core")
+    implementation("org.flywaydb:flyway-database-postgresql")
+
     runtimeOnly("org.postgresql:postgresql")
     testRuntimeOnly("org.postgresql:postgresql")
     testRuntimeOnly("com.h2database:h2")
