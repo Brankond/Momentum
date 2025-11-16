@@ -18,10 +18,22 @@ spring:
     port: 5672
     username: guest
     password: guest
+    listener:
+      simple:
+        auto-startup: false
   data:
     redis:
       host: localhost
       port: 6379
+
+wallet:
+  messaging:
+    command-queue: wallet.commands.queue.test
+    command-exchange: wallet.commands.test
+    debit-routing-key: wallet.debit.command
+    credit-routing-key: wallet.credit.command
+    event-exchange: wallet.events.test
+    transaction-result-routing-key: wallet.transaction.result
 
 management:
   endpoints:

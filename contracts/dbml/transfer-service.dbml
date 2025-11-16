@@ -1,0 +1,60 @@
+Table transfers {
+  transfer_id uuid [pk]
+  source_wallet_id uuid [not null]
+  destination_wallet_id uuid [not null]
+  amount_minor_units bigint [not null]
+  currency char(3) [not null]
+  reference varchar(120) [not null]
+  description text
+  metadata jsonb
+  correlation_id uuid [not null]
+  idempotency_key varchar(120) [not null, unique]
+  status varchar(32) [not null, note: 'PENDING, DEBIT_IN_PROGRESS, CREDIT_IN_PROGRESS, COMPLETED, FAILED']
+  failure_stage varchar(32)
+  failure_reason text
+  created_at timestamptz [not null, default: `current_timestamp`]
+  updated_at timestamptz [not null, default: `current_timestamp`]
+  completed_at timestamptz
+
+  Indexes {
+    (source_wallet_id)
+    (destination_wallet_id)
+    (status)
+    (correlation_id)
+  }
+}
+
+Table transfer_commands {
+  command_id uuid [pk]
+  transfer_id uuid [not null, ref: > transfers.transfer_id]
+  type varchar(16) [not null, note: 'DEBIT or CREDIT']
+  wallet_id uuid [not null]
+  amount_minor_units bigint [not null]
+  status varchar(32) [not null, note: 'PENDING, SENT, ACKED, FAILED']
+  last_error text
+  retry_count int [not null, default: 0]
+  sent_at timestamptz
+  acknowledged_at timestamptz
+  created_at timestamptz [not null, default: `current_timestamp`]
+  updated_at timestamptz [not null, default: `current_timestamp`]
+
+  Indexes {
+    (transfer_id)
+    (wallet_id)
+    (type)
+  }
+}
+
+Table transfer_idempotency {
+  idempotency_key varchar(120) [pk]
+  transfer_id uuid [not null, ref: > transfers.transfer_id]
+  request_hash char(64) [not null]
+  response_snapshot jsonb
+  expires_at timestamptz
+  created_at timestamptz [not null, default: `current_timestamp`]
+  updated_at timestamptz [not null, default: `current_timestamp`]
+
+  Indexes {
+    (transfer_id)
+  }
+}

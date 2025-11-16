@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://momentum/contracts/transfer-completed-event.schema.json",
+  "title": "Transfer Completed Event",
+  "description": "Event emitted by the Transfer Service when both debit and credit succeed.",
+  "allOf": [
+    {
+      "$ref": "./message-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "messageType": {
+          "const": "transfer.completed.event"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "transferId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Identifier of the completed transfer."
+            },
+            "debitWalletId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "creditWalletId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "amountMinorUnits": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "currency": {
+              "type": "string",
+              "pattern": "^[A-Z]{3}$"
+            },
+            "reference": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            "description": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "metadata": {
+              "type": "object",
+              "additionalProperties": {
+                "type": ["string", "number", "boolean", "null"]
+              }
+            },
+            "completedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "transferId",
+            "debitWalletId",
+            "creditWalletId",
+            "amountMinorUnits",
+            "currency",
+            "reference",
+            "completedAt"
+          ]
+        }
+      },
+      "required": ["payload"]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://momentum/contracts/wallet-credit-command.schema.json",
+  "title": "Wallet Credit Command",
+  "description": "Command published by the Transfer Service instructing the Wallet Service to credit funds.",
+  "allOf": [
+    {
+      "$ref": "./message-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "messageType": {
+          "const": "wallet.credit.command"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "commandId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Identifier for this credit command."
+            },
+            "transferId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Identifier of the transfer saga requesting the credit."
+            },
+            "walletId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Wallet to credit."
+            },
+            "amountMinorUnits": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Positive amount expressed in currency minor units."
+            },
+            "currency": {
+              "type": "string",
+              "pattern": "^[A-Z]{3}$",
+              "description": "ISO-4217 currency code."
+            },
+            "reference": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "description": "Idempotency key supplied by the caller."
+            },
+            "description": {
+              "type": "string",
+              "maxLength": 500,
+              "description": "Human readable memo."
+            },
+            "metadata": {
+              "type": "object",
+              "additionalProperties": {
+                "type": ["string", "number", "boolean", "null"]
+              },
+              "description": "Optional structured metadata serialized as JSON."
+            }
+          },
+          "required": [
+            "commandId",
+            "transferId",
+            "walletId",
+            "amountMinorUnits",
+            "currency",
+            "reference"
+          ]
+        }
+      },
+      "required": ["payload"]
+    }
+  ]
+}

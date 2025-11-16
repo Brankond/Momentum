@@ -1,9 +1,42 @@
 spring:
+  datasource:
+    url: jdbc:h2:mem:transfer;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  flyway:
+    enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
+    listener:
+      simple:
+        auto-startup: false
 
-server:
-  port: 0
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+
+transfer:
+  messaging:
+    wallet-command-exchange: wallet.commands.test
+    wallet-debit-routing-key: wallet.debit.command
+    wallet-credit-routing-key: wallet.credit.command
+    wallet-transaction-result-exchange: wallet.events.test
+    wallet-transaction-result-queue: wallet.transaction-results.test
+    wallet-transaction-result-routing-key: wallet.transaction.result
+    transfer-event-exchange: transfer.events.test
+    transfer-completed-routing-key: transfer.completed.event
+    transfer-failed-routing-key: transfer.failed.event
+    transfer-compensation-routing-key: transfer.compensation.event

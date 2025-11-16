@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://momentum/contracts/wallet-transaction-result-event.schema.json",
+  "title": "Wallet Transaction Result Event",
+  "description": "Event published by the Wallet Service after processing debit/credit commands.",
+  "allOf": [
+    {
+      "$ref": "./message-envelope.schema.json"
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "messageType": {
+          "const": "wallet.transaction.result"
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "commandId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Original command identifier."
+            },
+            "transferId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Transfer saga identifier."
+            },
+            "walletId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Affected wallet identifier."
+            },
+            "entryId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Ledger entry identifier when successful."
+            },
+            "type": {
+              "type": "string",
+              "enum": ["CREDIT", "DEBIT"],
+              "description": "Transaction type."
+            },
+            "status": {
+              "type": "string",
+              "enum": ["SUCCEEDED", "FAILED"],
+              "description": "Outcome of the transaction."
+            },
+            "amountMinorUnits": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Requested amount."
+            },
+            "runningBalanceMinorUnits": {
+              "type": "integer",
+              "description": "Wallet balance after the transaction; omitted when failed."
+            },
+            "reference": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120,
+              "description": "Idempotency key associated with the transaction."
+            },
+            "failureReason": {
+              "type": "string",
+              "description": "Human readable reason when status is FAILED."
+            }
+          },
+          "required": [
+            "commandId",
+            "transferId",
+            "walletId",
+            "type",
+            "status",
+            "amountMinorUnits",
+            "reference"
+          ],
+          "allOf": [
+            {
+              "if": {
+                "properties": { "status": { "const": "SUCCEEDED" } }
+              },
+              "then": {
+                "required": ["entryId", "runningBalanceMinorUnits"]
+              }
+            },
+            {
+              "if": {
+                "properties": { "status": { "const": "FAILED" } }
+              },
+              "then": {
+                "required": ["failureReason"]
+              }
+            }
+          ]
+        }
+      },
+      "required": ["payload"]
+    }
+  ]
+}

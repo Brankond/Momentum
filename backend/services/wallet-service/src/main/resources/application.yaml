@@ -24,6 +24,14 @@ spring:
     redis:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
+wallet:
+  messaging:
+    command-queue: wallet.commands.queue
+    command-exchange: wallet.commands
+    debit-routing-key: wallet.debit.command
+    credit-routing-key: wallet.credit.command
+    event-exchange: wallet.events
+    transaction-result-routing-key: wallet.transaction.result
 server:
   port: 8080
 

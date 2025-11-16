@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://momentum/contracts/message-envelope.schema.json",
+  "title": "Message Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "messageId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this message to support de-duplication."
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp for when the domain action occurred."
+    },
+    "correlationId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Correlation identifier shared across the saga or HTTP request."
+    },
+    "causationId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Identifier of the message that triggered this message."
+    },
+    "traceId": {
+      "type": "string",
+      "description": "Distributed tracing identifier propagated via headers (optional)."
+    },
+    "messageType": {
+      "type": "string",
+      "description": "Routing key or type name published on the broker."
+    },
+    "payloadVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the payload schema (major.minor.patch)."
+    }
+  },
+  "required": [
+    "messageId",
+    "occurredAt",
+    "correlationId",
+    "messageType",
+    "payloadVersion"
+  ]
+}
